@@ -1,0 +1,185 @@
+<app-nav-bar></app-nav-bar>
+<div class="container">
+  <div class="card">
+    <div class="card-header bg-dark">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="card-title"><strong style="color: whitesmoke">
+            Gestion Rendez-vous Time</strong></h4>
+        </div>
+        <!--<div *ngIf="mode==0" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary" style="border-color: white"
+                  (click)="newTime()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-simple-add"></i>
+                         </span>
+            Nouveau
+          </button>
+        </div>-->
+        <div *ngIf="mode==1" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary btn-sm" style="border-color: white"
+                  (click)="goToList()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-bullet-list-67"></i>
+                         </span>
+            Liste
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div *ngIf="mode==1">
+        <h5 class="card-title text-center">Rendez-vous du
+          <strong>{{appointmentResponse?.date | date: 'EEEE, MMMM d, y'}}</strong>
+        </h5>
+        <form [formGroup]="timeFormGroup">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Date</label>
+                <input class="form-control" type="time" formControlName="time"
+                       [ngClass]="{'is-invalid':submitted && timeFormGroup.controls.time.errors}"/>
+                <div *ngIf="submitted && timeFormGroup.controls.time.errors" class="invalid-feedback">
+                  <div *ngIf="timeFormGroup.controls.time.errors.required">Time is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Max de personne</label>
+                <input class="form-control" type="number" formControlName="max"
+                       [ngClass]="{'is-invalid':submitted && timeFormGroup.controls.max.errors}"/>
+                <div *ngIf="submitted && timeFormGroup.controls.max.errors" class="invalid-feedback">
+                  <div *ngIf="timeFormGroup.controls.max.errors.required">Max is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>&nbsp;</div>
+          <button type="button" class="btn btn-success" (click)="saveTime()">
+            <i class="fa fa-save"></i>
+            Enrégistrer
+          </button>
+        </form>
+        <div>&nbsp;</div>
+        <div *ngIf="modeUpdate==0">
+          <table class="table table-striped table-bordered">
+            <thead style="text-align: center">
+            <tr>
+              <th>N&deg;</th>
+              <th>HORAIRE</th>
+              <th>NBRE DE PERSONNE</th>
+              <th>ACTION</th>
+            </tr>
+            </thead>
+            <tbody style="text-align: center">
+            <tr *ngFor="let timeApp of timeAppointmentResponse; index as i">
+              <td>{{ i+1 }}</td>
+              <td>{{timeApp.time}}</td>
+              <td>{{timeApp.max}}</td>
+              <td>
+                <button (click)="deleteTimeApp(i, timeApp)" class="btn btn-danger btn-sm" title="Supprimer l'horaire">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="mode==0">
+        <form class="form-horizontal">
+          <div class="row">
+            <div class="col-md-3" style="position: relative;left: 30%">
+              <div class="form-group">
+                <label class="label-important">Date du rendez-vous</label>
+                <input class="form-control" type="date" name="searchDateApp" [(ngModel)]="searchDateApp"/>
+              </div>
+            </div>
+            <div class="col-md-3" style="position: relative;left: 35%">
+              <br>
+              <button class="btn btn-dark" (click)="onSearch()">
+                            <span class="btn-label">
+                                <i class="fa fa-search"></i>
+                            </span>
+                Rechercher
+              </button>
+            </div>
+          </div>
+        </form>
+        <ng-container *ngIf="(timeAppointments$ | async) as result" [ngSwitch]="result.dataState">
+          <ng-container *ngSwitchCase="DataSateEnum.LOADING">
+            LOADING.....
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.ERROR">
+            <div class="alert-danger">
+              {{result.errorMessage}}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.LOADED">
+            <div class="content table-responsive table-full-width container-fluid">
+              <div class="toolbar">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label>
+                          <strong>
+                            Taille
+                          </strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <select #taille class="form-control" name="taille" (change)="sizeChanged(taille.value)">
+                          <option  *ngFor="let option of selectValues"
+                                   value="{{option.value}}">{{option.value}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-2"></div>
+                  <!--<div class="col-md-6" style="text-align: right">
+                      <button class="btn btn-default" (click)="export()">
+                          <i class="fa fa-download"></i>
+                          Exporter
+                      </button>
+                  </div>-->
+                </div>
+              </div>
+              <table #table class="table table-striped">
+                <thead style="text-align: center">
+                <tr>
+                  <th>N&deg;</th>
+                  <th>HORAIRE</th>
+                  <th>MAX DE PERSONNE</th>
+                  <th>ACTION</th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center">
+                <tr *ngFor="let time of result.data | paginate: {itemsPerPage: pageSize,
+                                     currentPage: currentPage}; index as i">
+                  <td>{{ (((currentPage-1)*pageSize)+1)+i }}</td>
+                  <td>{{ time.time }}</td>
+                  <td>{{ time.max }}</td>
+                  <td>
+                    <button (click)="goToUpdate(time)" class="btn btn-dark btn-sm" title="modifier">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+          </ng-container>
+          <div class="text-center" *ngIf="result.data?.length==0">
+            <i class="text-info">Aucune ligne trouvée.</i>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

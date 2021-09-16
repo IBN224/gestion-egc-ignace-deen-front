@@ -1,0 +1,179 @@
+<app-nav-bar></app-nav-bar>
+<div class="container">
+  <div class="card">
+    <div class="card-header bg-dark">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="card-title"><strong style="color: whitesmoke">
+            Gestion Patient Rendez-vous</strong></h4>
+        </div>
+        <!--<div *ngIf="mode==0" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary" style="border-color: white"
+                  (click)="newSchedule()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-simple-add"></i>
+                         </span>
+            Nouveau
+          </button>
+        </div>
+        <div *ngIf="mode==1" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary" style="border-color: white"
+                  (click)="goToList()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-bullet-list-67"></i>
+                         </span>
+            Liste
+          </button>
+        </div>-->
+      </div>
+    </div>
+    <div class="card-body">
+     <!-- <div *ngIf="mode==1">
+        <form [formGroup]="scheduleFormGroup">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Date</label>
+                <input class="form-control" type="date" formControlName="date"
+                       [ngClass]="{'is-invalid':submitted && scheduleFormGroup.controls.date.errors}"/>
+                <div *ngIf="submitted && scheduleFormGroup.controls.date.errors" class="invalid-feedback">
+                  <div *ngIf="scheduleFormGroup.controls.date.errors.required">Date is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Max de personne</label>
+                <input class="form-control" type="number" formControlName="max"
+                       [ngClass]="{'is-invalid':submitted && scheduleFormGroup.controls.max.errors}"/>
+                <div *ngIf="submitted && scheduleFormGroup.controls.max.errors" class="invalid-feedback">
+                  <div *ngIf="scheduleFormGroup.controls.max.errors.required">Max is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="modeUpdate==1">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Status</label>
+                <select class="form-control" formControlName="stateAppointment">
+                  <option value="AVAILABLE">AVAILABLE</option>
+                  <option value="PASSED">PASSED</option>
+                  <option value="FULL">FULL</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div>&nbsp;</div>
+          <button type="button" class="btn btn-success" (click)="saveSchedule()">
+            <i class="fa fa-save"></i>
+            Enrégistrer
+          </button>
+        </form>
+
+      </div>-->
+      <div>
+        <form class="form-horizontal">
+          <div class="row">
+            <div class="col-md-3" style="position: relative;left: 30%">
+              <div class="form-group">
+                <label class="label-important">Date du rendez-vous</label>
+                <input class="form-control" type="date" name="searchDateApp" [(ngModel)]="searchDateApp"/>
+              </div>
+            </div>
+            <div class="col-md-3" style="position: relative;left: 35%">
+              <br>
+              <button class="btn btn-dark" (click)="onSearch()">
+                            <span class="btn-label">
+                                <i class="fa fa-search"></i>
+                            </span>
+                Rechercher
+              </button>
+            </div>
+          </div>
+        </form>
+        <ng-container *ngIf="(patientAppointment$ | async) as result" [ngSwitch]="result.dataState">
+          <ng-container *ngSwitchCase="DataSateEnum.LOADING">
+            LOADING.....
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.ERROR">
+            <div class="alert-danger">
+              {{result.errorMessage}}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.LOADED">
+            <div class="content table-responsive table-full-width container-fluid">
+              <div class="toolbar">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label>
+                          <strong>
+                            Taille
+                          </strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <select #taille class="form-control" name="taille" (change)="sizeChanged(taille.value)">
+                          <option  *ngFor="let option of selectValues"
+                                   value="{{option.value}}">{{option.value}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-2"></div>
+                  <!--<div class="col-md-6" style="text-align: right">
+                      <button class="btn btn-default" (click)="export()">
+                          <i class="fa fa-download"></i>
+                          Exporter
+                      </button>
+                  </div>-->
+                </div>
+              </div>
+              <table #table class="table table-striped">
+                <thead style="text-align: center">
+                <tr>
+                  <th>N&deg;</th>
+                  <th>NOM</th>
+                  <th>PRENOM</th>
+                  <th>TELEPHONE</th>
+                  <th>HEURE</th>
+                  <th>DATE</th>
+                  <th>ACTION</th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center">
+                <tr *ngFor="let appointment of result.data | paginate: {itemsPerPage: pageSize,
+                                     currentPage: currentPage}; index as i">
+                  <td>{{ (((currentPage-1)*pageSize)+1)+i }}</td>
+                  <td>{{ appointment.patient.nom }}</td>
+                  <td>{{ appointment.patient.prenom }}</td>
+                  <td>{{ appointment.patient.telephone }}</td>
+                  <td>{{ appointment.timeAppointment.time }}</td>
+                  <td>{{ appointment.timeAppointment.appointment.date | date: 'dd/MM/yyyy' }}</td>
+                  <td>
+                    <button (click)="goToUpdate(appointment)" class="btn btn-dark btn-sm" title="modifier">
+                      <i class="fa fa-edit"></i>
+                    </button>&nbsp;
+                    <button (click)="onGoToTime(appointment)" class="btn btn-secondary btn-sm" title="Time">
+                      <i class="fa fa-id-badge"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+          </ng-container>
+          <div class="text-center" *ngIf="result.data?.length==0">
+            <i class="text-info">Aucune ligne trouvée.</i>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

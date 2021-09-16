@@ -1,0 +1,288 @@
+<app-header></app-header>
+<section>
+<div class="container">
+  <br>
+  <br>
+  <br>
+  <br>
+<div class="card">
+  <!--<div class="card-header">
+    <div class="text-center"><strong>HOPITAL IGNACE DEEN CHU DE CONAKRY (CRY)</strong></div>
+    <div>
+      The Ignace Deen Hospital (Hôpital Ignace Deen) is a hospital in Conakry, Guinea built
+      during the colonial era. The hospital is situated next to the National Museum.[1]
+    </div>
+  </div>-->
+  <div class="card-body">
+    <div #afterSave>
+      <div *ngIf="mode==2">
+      <div class="row">
+        <div class="row">
+          <div class="col-md-10">
+            <div class="alert alert-success">
+              <strong>Succès!</strong> Enregistrement effectué avec succès. <b>Télécharger votre confirmation de rendez-vous.</b>
+              <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+            </div>
+          </div>
+            <div class="col-md-2">
+              <button class="btn btn-success" (click)="print()">Télécharger</button>
+            </div>
+        </div>
+        <div class="col-md-12" id="htmlData">
+          <div class="card">
+            <div class="card-header">
+              <img src="assets/img/logo.png" style="width:150px;height:60px;" alt="">
+              <p>
+                Près de Metal Guinée – Kipé Ratoma Conakry, Guinée. <strong>Téléphone:</strong><a href="tel:+1 5589 55488 55">+1 5589 55488 55</a>
+                &nbsp;<strong>Email:</strong><a href="mailto:email@example.com">info@example.com</a>
+              </p>
+            </div>
+            <div class="card-body">
+              <p>Dear {{confirmScheduleFormGroup.value.prenom}}</p>
+              <p>You are scheduled for the following appointment:</p>
+              <p>
+                Date: <strong>{{date | date:'dd/MM/yyyy'}}</strong><br>
+                Heure: <strong>{{heure}}</strong><br>
+                Service: <strong>{{service}}</strong><br>
+                Specialiste: {{status}}&nbsp;<strong>{{specialiste}}</strong>
+              </p>
+              <p>
+                We look forward to seeing you soon.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div #confirm>
+      <div *ngIf="mode==1">
+        <div *ngIf="modeAlert==2" class="alert alert-danger alert-dismissible">
+          <strong>Erreur!</strong> Erreur d"enregistrement.
+          <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+        </div>
+        <div class="col-md-12">
+          <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span>Confirmer vos infos</h5>
+          <table class="table table-sm table-hover table-striped">
+            <tbody>
+            <tr>
+              <td>
+                <strong>Prénom du Patient</strong> &nbsp;&nbsp;{{confirmScheduleFormGroup.value.prenom}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Nom du Patient </strong> &nbsp;&nbsp;{{confirmScheduleFormGroup.value.nom}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Age</strong> &nbsp;&nbsp;{{confirmScheduleFormGroup.value.age}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Numero de Telephone</strong> &nbsp;&nbsp;{{confirmScheduleFormGroup.value.telephone}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Adresse</strong> &nbsp;&nbsp;{{confirmScheduleFormGroup.value.adresse}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Genre</strong> &nbsp;&nbsp;{{confirmScheduleFormGroup.value.genre}}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-sm btn-secondary" (click)="confirmSchedule()">
+            <i class="fa fa-save"></i> Enrégistrer
+          </button>&nbsp;
+          <button type="button" class="btn btn-sm btn-secondary" (click)="mode=0">
+            <i class="fa fa-step-forward"></i> Modifier
+          </button>&nbsp;
+        </div>
+      </div>
+    </div>
+    <div *ngIf="mode==0">
+    <table width="90%">
+      <tbody>
+      <tr>
+        <td style="background-color: #add9f4">&nbsp;<strong>ACS Appointment System - Complete Appointment Details</strong></td>
+        <td>&nbsp;</td>
+      </tr>
+      </tbody>
+    </table>
+    <br>
+    <form [formGroup]="confirmScheduleFormGroup">
+      <table width="100%" id="Table2">
+        <tbody>
+        <tr>
+          <td style="background-color: #f1f1f1;font-weight: bold" width="50%">
+            &nbsp; Please complete the application form below:
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <br>
+      <div style="background-color: #E7FFE7" >
+        <table width="60%">
+      <tbody>
+      <tr>
+        <td style="background-color: #add9f4" width="50%">
+          &nbsp;<b>APPOINTMENT DETAILS</b>
+        </td>
+      </tr>
+      <tr>
+        <td width="50%">&nbsp;Date of Appointment:</td>
+        <td width="50%"><b>{{date | date: 'EEEE, MMMM d, y'}}</b></td>
+      </tr>
+      <tr>
+        <td width="50%">&nbsp;Service Requested:</td>
+        <td width="50%">&nbsp;Notarial Service</td>
+      </tr>
+      <tr><td width="50%">&nbsp;</td></tr>
+      <tr>
+        <td width="50%"><b>&nbsp;AVAILABLE TIME SLOTS</b></td>
+
+      </tr>
+      <tr>
+        <td width="50%">&nbsp;Appointment Time: <br>&nbsp;(Please select one)</td>
+        <td width="50%">
+         <table border="0" cellspacing="1" cellpadding="3" width="100%" id="Table4">
+          <tbody>
+          <tr></tr>
+          <tr *ngFor="let time of timeAppointmentResponse; index as i">
+            <td *ngIf="time.patientAppointments.length<time.max" width="50%">
+              <div>
+                <input class="clickable" type="radio" id="{{time.id}}" value="{{time.id}}" formControlName="timeAppId">
+                <label class="clickable" for="{{time.id}}">&nbsp;&nbsp;&nbsp;&nbsp;{{time.time}} &nbsp;&nbsp; ({{time.max}} Available) </label>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+         </table>
+          <div class="text-danger" *ngIf="submitted && confirmScheduleFormGroup.value.timeAppId==''">Heure est obligatoire</div>
+        </td>
+      </tr>
+      <tr><td width="50%" align="left" colspan="2">&nbsp;</td></tr>
+      <tr>
+        <td width="50%">&nbsp;<b>IDENTIFICATION CODE</b></td>
+      </tr>
+      <tr>
+        <td width="50%">&nbsp;Prénom du Patient :</td>
+        <td width="50%">
+          <div class="row">
+            <div class="col-md-12">
+              <input class="form-control" type="text" formControlName="prenom" placeholder="Prénom" maxlength="100"
+                     [ngClass]="{'is-invalid':submitted && confirmScheduleFormGroup.controls.prenom.errors}"/>
+              <div *ngIf="submitted && confirmScheduleFormGroup.controls.prenom.errors" class="invalid-feedback">
+                <div *ngIf="confirmScheduleFormGroup.controls.prenom.errors.required">Prénom est obligatoire</div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td width="50%">&nbsp;Nom du Patient :</td>
+        <td width="50%">
+          <div class="row">
+            <div class="col-md-12">
+              <input class="form-control" type="text" formControlName="nom" placeholder="Nom" maxlength="100"
+                     [ngClass]="{'is-invalid':submitted && confirmScheduleFormGroup.controls.nom.errors}"/>
+              <div *ngIf="submitted && confirmScheduleFormGroup.controls.nom.errors" class="invalid-feedback">
+                <div *ngIf="confirmScheduleFormGroup.controls.nom.errors.required">Nom est obligatoire</div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td>&nbsp; Age :</td>
+        <td>
+          <div class="row">
+            <div class="col-md-12">
+              <input class="form-control" type="number" formControlName="age"
+                     [ngClass]="{'is-invalid':submitted && confirmScheduleFormGroup.controls.age.errors}"/>
+              <div *ngIf="submitted && confirmScheduleFormGroup.controls.age.errors" class="invalid-feedback">
+                <div *ngIf="confirmScheduleFormGroup.controls.age.errors.required">Age est obligatoire</div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td width="50%"><label class="label-important"></label>&nbsp;Numero de Telephone :</td>
+        <td width="50%" align="left">
+          <div class="row">
+            <div class="col-md-12">
+              <input class="form-control" type="text" formControlName="telephone" data-inputmask="'mask': '999-99-99-99'" inputmode="numeric"
+                     placeholder="xxx-xx-xx-xx" [ngClass]="{'is-invalid':submitted && confirmScheduleFormGroup.controls.telephone.errors}"/>
+              <div *ngIf="submitted && confirmScheduleFormGroup.controls.telephone.errors" class="invalid-feedback">
+                <div *ngIf="confirmScheduleFormGroup.controls.telephone.errors.required">Telephone est obligatoire</div>
+              </div>
+            </div>
+          </div>
+          <div class="text-danger" *ngIf="phoneInvalid">Contact déja utilisé!</div>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td width="50%">&nbsp;Addresse :</td>
+        <td width="50%">
+          <div class="row">
+            <div class="col-md-12">
+              <input class="form-control" type="text" formControlName="adresse" placeholder="Adresse" maxlength="50"
+                     [ngClass]="{'is-invalid':submitted && confirmScheduleFormGroup.controls.adresse.errors}"/>
+              <div *ngIf="submitted && confirmScheduleFormGroup.controls.adresse.errors" class="invalid-feedback">
+                <div *ngIf="confirmScheduleFormGroup.controls.adresse.errors.required">Adresse est obligatoire</div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td width="50%">&nbsp;Genre :</td>
+        <td>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input class="clickable" type="radio" id="inlineRadio1" value="M" formControlName="genre">
+                <label class="clickable form-label" for="inlineRadio1"> &nbsp;Masculin </label>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input class="clickable" type="radio" id="inlineRadio2" value="F" formControlName="genre">
+                <label class="form-label clickable" for="inlineRadio2"> &nbsp;Féminin </label>
+              </div>
+            </div>
+          </div>
+          <div class="text-danger" *ngIf="submitted && confirmScheduleFormGroup.value.genre==''">Genre est obligatoire</div>
+        </td>
+      </tr>
+      <br>
+      </tbody>
+      </table>
+      </div>
+      <br>
+      <button type="button" class="btn btn-sm btn-secondary" (click)="onContinue()">
+        <i class="fa fa-step-forward"></i> Continuer
+      </button>&nbsp;
+      <button type="button" class="btn btn-sm btn-secondary" onclick="javascript:history.go(-1);">
+        <i class="fa fa-backward"></i> Retour
+      </button>
+    <br>
+    </form>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+<app-footer></app-footer>

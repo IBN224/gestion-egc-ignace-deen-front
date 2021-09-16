@@ -1,0 +1,197 @@
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<app-header></app-header>
+<div class="container">
+  <div class="card" style="margin: auto;max-width: 80%">
+    <!--<div class="card-header">
+      <button (click)="onNewAppointment()" class="btn btn-sm btn-outline-info m-lg-2">NEW SCHEDULE</button>
+      <div class="text-center text-danger">
+        <strong>{{nameMonth}}&nbsp;&nbsp;{{nYearValue}}</strong>
+      </div>
+      <div class="text-center"><strong>HOPITAL IGNACE DEEN CHU DE CONAKRY (CRY)</strong></div>
+      <div>
+        The Ignace Deen Hospital (Hôpital Ignace Deen) is a hospital in Conakry,
+        Guinea built during the colonial era. The hospital is situated next to the National Museum.[1]
+        &lt;!&ndash;The U.S. Embassy in Conakry is accepting a limited number of passport, Consular Report of Birth Abroad,
+        and notarial appointments. All other matters, please email ConakryACS@state.gov&ndash;&gt;
+      </div>
+        <div class="text-center">
+          <h4 class="card-title"><strong>
+            NOTARIAL and OTHER SERVICES Appointment</strong><br>
+            Please click the underline or hyperlink date below.
+          </h4>
+        </div>
+    </div>-->
+    <div class="card-body">
+      <div class="content table-responsive table-full-width container-fluid">
+        <div class="toolbar">
+          <div class="row">
+            <div class="col-md-4">
+              <select #searchDepart class="form-control" (change)="departementChanged(searchDepart.value)" name="searchDepartement" [(ngModel)]="searchDepartement">
+                <option disabled value="undefined">Departements......</option>
+                <option *ngFor="let departement of responseDepartement" value="{{departement.id}}">
+                  {{departement.name}}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <select class="form-control" name="searchDocteur" [(ngModel)]="searchDocteur">
+                <option disabled value="undefined">Docteurs.....</option>
+                <option *ngFor="let docteur of responseSpecialiste" value="{{docteur.id}}">
+                  {{docteur.lastName+" "+docteur.firstName}}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select #nMonth class="form-control" [(ngModel)]="nMonthValue" (change)="nMonthChanged(nMonth.value)" name="nMonthValue" id="Select1">
+                <option value="1">Janvier</option>
+                <option value="2">Février</option>
+                <option value="3">Mars</option>
+                <option value="4">Avril</option>
+                <option value="5">Mai</option>
+                <option value="6">Juin</option>
+                <option value="7">Juillet</option>
+                <option value="8">Août</option>
+                <option value="9">Septembre</option>
+                <option value="10">Octobre</option>
+                <option value="11">Novembre</option>
+                <option value="12">Décembre</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select #nYear class="form-control" name="nYearValue" [(ngModel)]="nYearValue" (change)="nYearChanged(nYear.value)" id="Select2">
+                <option value="2021" selected="">2021</option>
+                <option value="2022">2022</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <br>
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th>Dimanche</th>
+            <th>Lundi</th>
+            <th>Mardi</th>
+            <th>Mercredi</th>
+            <th>Jeudi</th>
+            <th>Vendredi</th>
+            <th>Samedi</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let d of finalDaysOf;">
+            <td class="text-center"
+                [ngStyle]="d.Sunday == '' ? {'background-color':'#B8B8B8'} : ((d.Sunday | subDay: d.Sunday : nMonthValue : nYearValue : searchDocteur | async) == 0 ?{'background-color':'#ffffc0'}
+                 : ((d.Sunday | subDay: d.Sunday : nMonthValue : nYearValue : searchDocteur | async) == 2 ? {'background-color':'#ADD9F4'}
+                 : ((d.Sunday | subDay: d.Sunday : nMonthValue : nYearValue : searchDocteur | async) == 1 ? {'background-color':'#B8B8B8'}
+                 : {'background-color':'#B8B8B8'})))  ">
+              <span *ngIf="d.Sunday!=''&&(d.Sunday | subDay: d.Sunday : nMonthValue : nYearValue : searchDocteur | async) == 0">
+                <a class="clickable1" (click)="onGetSchedule(d.Sunday)">{{d.Sunday}}<br>Available</a>
+              </span>
+              <span *ngIf="(d.Sunday | subDay: d.Sunday : nMonthValue : nYearValue : searchDocteur | async) != 0">{{d.Sunday}}</span>
+            </td>
+            <td class="text-center"
+                [ngStyle]="d.Monday == '' ? {'background-color':'#B8B8B8'} : ((d.Monday | subDay: d.Monday : nMonthValue : nYearValue : searchDocteur | async) == 0 ?{'background-color':'#ffffc0'}
+                 : ((d.Monday | subDay: d.Monday : nMonthValue : nYearValue : searchDocteur | async) == 2 ? {'background-color':'#ADD9F4'}
+                 : ((d.Monday | subDay: d.Monday : nMonthValue : nYearValue : searchDocteur | async) == 1 ? {'background-color':'#B8B8B8'}
+                 : {'background-color':'#B8B8B8'})))">
+              <span *ngIf="d.Monday!=''&&(d.Monday | subDay: d.Monday : nMonthValue : nYearValue : searchDocteur | async) == 0">
+                <a class="clickable1" (click)="onGetSchedule(d.Monday)">{{d.Monday}}<br>Available</a>
+              </span>
+              <span *ngIf="(d.Monday | subDay: d.Monday : nMonthValue : nYearValue : searchDocteur | async) != 0">{{d.Monday}}</span>
+            </td>
+            <td class="text-center"
+                [ngStyle]="d.Tuesday == '' ? {'background-color':'#B8B8B8'} : ((d.Tuesday | subDay: d.Tuesday : nMonthValue : nYearValue : searchDocteur | async) == 0 ?{'background-color':'#ffffc0'}
+                 : ((d.Tuesday | subDay: d.Tuesday : nMonthValue : nYearValue : searchDocteur | async) == 2 ? {'background-color':'#ADD9F4'}
+                 : ((d.Tuesday | subDay: d.Tuesday : nMonthValue : nYearValue : searchDocteur | async) == 1 ? {'background-color':'#B8B8B8'}
+                 : {'background-color':'#B8B8B8'})))">
+              <span *ngIf="d.Tuesday!=''&&(d.Tuesday | subDay: d.Tuesday : nMonthValue : nYearValue : searchDocteur | async) == 0">
+                <a class="clickable1" (click)="onGetSchedule(d.Tuesday)">{{d.Tuesday}}<br>Available</a>
+              </span>
+              <span *ngIf="(d.Tuesday | subDay: d.Tuesday : nMonthValue : nYearValue : searchDocteur | async) != 0">{{d.Tuesday}}</span>
+            </td>
+            <td class="text-center"
+                [ngStyle]="d.Wednesday == '' ? {'background-color':'#B8B8B8'} : ((d.Wednesday | subDay: d.Wednesday : nMonthValue : nYearValue : searchDocteur | async) == 0 ?{'background-color':'#ffffc0'}
+                 : ((d.Wednesday | subDay: d.Wednesday : nMonthValue : nYearValue : searchDocteur | async) == 2 ? {'background-color':'#ADD9F4'}
+                 : ((d.Wednesday | subDay: d.Wednesday : nMonthValue : nYearValue : searchDocteur | async) == 1 ? {'background-color':'#B8B8B8'}
+                 : {'background-color':'#B8B8B8'})))">
+              <span *ngIf="d.Wednesday!=''&&(d.Wednesday | subDay: d.Wednesday : nMonthValue : nYearValue : searchDocteur | async) == 0">
+                <a class="clickable1" (click)="onGetSchedule(d.Wednesday)">{{d.Wednesday}}<br>Available</a>
+              </span>
+              <span *ngIf="(d.Wednesday | subDay: d.Wednesday : nMonthValue : nYearValue : searchDocteur | async) != 0">{{d.Wednesday}}</span>
+            </td>
+            <td class="text-center"
+                [ngStyle]="d.Thursday == '' ? {'background-color':'#B8B8B8'} : ((d.Thursday | subDay: d.Thursday : nMonthValue : nYearValue : searchDocteur | async) == 0 ?{'background-color':'#ffffc0'}
+                 : ((d.Thursday | subDay: d.Thursday : nMonthValue : nYearValue : searchDocteur | async) == 2 ? {'background-color':'#ADD9F4'}
+                 : ((d.Thursday | subDay: d.Thursday : nMonthValue : nYearValue : searchDocteur | async) == 1 ? {'background-color':'#B8B8B8'}
+                 : {'background-color':'#B8B8B8'})))">
+              <span *ngIf="d.Thursday!=''&&(d.Thursday | subDay: d.Thursday : nMonthValue : nYearValue : searchDocteur | async) == 0">
+                <a class="clickable1" (click)="onGetSchedule(d.Thursday)">{{d.Thursday}}<br>Available</a>
+              </span>
+              <span *ngIf="(d.Thursday | subDay: d.Thursday : nMonthValue : nYearValue : searchDocteur | async) != 0">{{d.Thursday}}</span>
+            </td>
+            <td class="text-center"
+                [ngStyle]="d.Friday == '' ? {'background-color':'#B8B8B8'} : ((d.Friday | subDay: d.Friday : nMonthValue : nYearValue : searchDocteur | async) == 0 ?{'background-color':'#ffffc0'}
+                 : ((d.Friday | subDay: d.Friday : nMonthValue : nYearValue : searchDocteur | async) == 2 ? {'background-color':'#ADD9F4'}
+                 : ((d.Friday | subDay: d.Friday : nMonthValue : nYearValue : searchDocteur | async) == 1 ? {'background-color':'#B8B8B8'}
+                 : {'background-color':'#B8B8B8'})))">
+              <span *ngIf="d.Friday!=''&&(d.Friday | subDay: d.Friday : nMonthValue : nYearValue : searchDocteur | async) == 0">
+                <a class="clickable1" (click)="onGetSchedule(d.Friday)">{{d.Friday}}<br>Available</a>
+              </span>
+              <span *ngIf="(d.Friday | subDay: d.Friday : nMonthValue : nYearValue : searchDocteur | async) != 0">{{d.Friday}}</span>
+            </td>
+            <td class="text-center"
+                [ngStyle]="d.Saturday == '' ? {'background-color':'#B8B8B8'} : ((d.Saturday | subDay: d.Saturday : nMonthValue : nYearValue : searchDocteur | async) == 0 ?{'background-color':'#ffffc0'}
+                 : ((d.Saturday | subDay: d.Saturday : nMonthValue : nYearValue : searchDocteur | async) == 2 ? {'background-color':'#ADD9F4'}
+                 : ((d.Saturday | subDay: d.Saturday : nMonthValue : nYearValue : searchDocteur | async) == 1 ? {'background-color':'#B8B8B8'}
+                 : {'background-color':'#B8B8B8'})))">
+              <span *ngIf="d.Saturday!=''&&(d.Saturday | subDay: d.Saturday : nMonthValue : nYearValue : searchDocteur | async) == 0">
+                <a class="clickable1" (click)="onGetSchedule(d.Saturday)">{{d.Saturday}}<br>Available</a>
+              </span>
+              <span *ngIf="(d.Saturday | subDay: d.Saturday : nMonthValue : nYearValue : searchDocteur | async) != 0">{{d.Saturday}}</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer ">
+        <table id="Table4">
+          <tbody>
+          <tr>
+            <td width="10%" bgcolor="#B8B8B8"></td>
+            <td width="10%">&nbsp;</td>
+            <td width="80%" class="formfield">
+              <u>Date already passed or not yet open for appointments</u>
+            </td>
+          </tr>
+          <tr>
+            <td width="10%" bgcolor="#ADD9F4">
+            </td>
+            <td width="10%">&nbsp;
+            </td>
+            <td width="80%" class="formfield">
+              <u>Appointment Date Fully Booked</u>
+            </td>
+          </tr>
+          <tr>
+            <td width="10%" bgcolor="#ffffc0">
+            </td>
+            <td width="10%">&nbsp;
+            </td>
+            <td width="80%" class="formfield">
+              <font color="red"><u>Appointment Date Available</u></font>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

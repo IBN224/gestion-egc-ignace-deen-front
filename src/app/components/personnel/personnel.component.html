@@ -1,0 +1,334 @@
+<app-nav-bar></app-nav-bar>
+<div class="container">
+  <div class="card">
+    <div class="card-header bg-dark">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="card-title"><strong style="color: whitesmoke">
+            Gestion Personnel</strong></h4>
+        </div>
+        <div *ngIf="mode==0" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary btn-sm" style="border-color: white"
+                  (click)="newPersonnel()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-simple-add"></i>
+                         </span>
+            Nouveau
+          </button>
+        </div>
+        <div *ngIf="mode==1" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary btn-sm" style="border-color: white"
+                  (click)="goToList()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-bullet-list-67"></i>
+                         </span>
+            Liste
+          </button>
+        </div>
+        <div *ngIf="mode==2" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary btn-sm" style="border-color: white"
+                  (click)="mode=0;">
+                       <span class="btn-label">
+                           <i class="fa fa-arrow-left"></i>
+                       </span>
+            Retour
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div *ngIf="mode==1">
+        <form [formGroup]="personnelFormGroup">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Nom</label>
+                <input class="form-control" type="text" formControlName="lastName"
+                       [ngClass]="{'is-invalid':submitted && personnelFormGroup.controls.lastName.errors}"/>
+                <div *ngIf="submitted && personnelFormGroup.controls.lastName.errors" class="invalid-feedback">
+                  <div *ngIf="personnelFormGroup.controls.lastName.errors.required">Nom est obligatoire</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Prenom</label>
+                <input class="form-control" type="text" formControlName="firstName"
+                       [ngClass]="{'is-invalid':submitted && personnelFormGroup.controls.firstName.errors}"/>
+                <div *ngIf="submitted && personnelFormGroup.controls.firstName.errors" class="invalid-feedback">
+                  <div *ngIf="personnelFormGroup.controls.firstName.errors.required">Prenom est obligatoire</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Fonction</label>
+                <select class="form-control" formControlName="statusPersonnel"
+                        [ngClass]="{'is-invalid':submitted && personnelFormGroup.controls.statusPersonnel.value=='undefined'}">
+                  <option disabled value="undefined">Fonction......</option>
+                  <option *ngFor="let fonction of fonctionResponse" value="{{fonction.id}}">
+                    {{ fonction.name }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && personnelFormGroup.controls.statusPersonnel.value=='undefined'" class="invalid-feedback">
+                  <div *ngIf="personnelFormGroup.controls.statusPersonnel.value=='undefined'">Fonction est obligatoire</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Docteur</label>
+                <select #isDocteur class="form-control" formControlName="isDoctor" (change)="isDocteurChanged(isDocteur.value)"
+                        [ngClass]="{'is-invalid':submitted && personnelFormGroup.controls.isDoctor.value=='undefined'}">
+                  <option disabled value="undefined">Options......</option>
+                  <option value=1>OUI</option>
+                  <option value=0>NON</option>
+                </select>
+                <div *ngIf="submitted && personnelFormGroup.controls.isDoctor.value=='undefined'" class="invalid-feedback">
+                  <div *ngIf="personnelFormGroup.controls.isDoctor.value=='undefined'">Option Docteur est obligatoire</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div *ngIf="isDoctorOption==1" class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Departement</label>
+                <select class="form-control" formControlName="departement"
+                        [ngClass]="{'is-invalid':submitted && personnelFormGroup.controls.departement.value=='undefined'}">
+                  <option disabled value="undefined">Departements......</option>
+                  <option *ngFor="let departement of departementResponse" value="{{departement.id}}">
+                    {{ departement.name }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && personnelFormGroup.controls.departement.value=='undefined'" class="invalid-feedback">
+                  <div *ngIf="personnelFormGroup.controls.departement.value=='undefined'">Departement est obligatoire</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>&nbsp;</div>
+          <button type="button" class="btn btn-success" (click)="savePersonnel()">
+            <i class="fa fa-save"></i>
+            Enrégistrer
+          </button>
+        </form>
+      </div>
+      <div *ngIf="mode==2">
+        <div>
+          <div class="col-md-12">
+            <h5 class="mt-2"><span class="fa fa-info-circle float-right"></span>INFO PERSONNEL</h5>
+            <!--<table class="table table-striped table-bordered table-hover">
+              <tbody>
+              <tr>
+                <th>NOM</th>
+                <td>{{responsePersonnelInfo.firstName}}</td>
+                <th>PRENOM</th>
+                <td>{{responsePersonnelInfo.lastName}}</td>
+                <th>FONCTION</th>
+                <td>{{responsePersonnelInfo.statusPersonnel.name}}</td>
+                <th>DEPARTEMENT</th>
+                <td>{{responsePersonnelInfo.departement.name}}</td>
+              </tr>
+              </tbody>
+            </table>-->
+            <table class="table table-sm table-hover table-striped">
+              <tbody>
+              <tr>
+                <td>
+                  <strong>NOM</strong> &nbsp;&nbsp;{{responsePersonnelInfo.lastName}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>PRENOM</strong> &nbsp;&nbsp;{{responsePersonnelInfo.firstName}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>FONCTION</strong> &nbsp;&nbsp;{{responsePersonnelInfo.statusPersonnel.name}}
+                </td>
+              </tr>
+              <tr>
+                <td *ngIf="responsePersonnelInfo.isDoctor">
+                  <strong>DEPARTEMENT</strong> &nbsp;&nbsp;{{responsePersonnelInfo.departement.name}}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <!--<fieldset class="well the-fieldset">
+            <legend class="the-legend">Specialiste</legend>
+            <div>
+              <table class="table table-striped table-bordered table-hover" id="sample_1">
+                <tbody>
+                <tr>
+                  <th>NOM</th>
+                  <td>{{nomSpeciaInfo}}</td>
+                  <th>PRENOM</th>
+                  <td>{{prenomSpeciaInfo}}</td>
+                  <th>STATUS</th>
+                  <td>{{statusSpeciaInfo}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </fieldset>-->
+          <!--<div>
+            <fieldset class="well the-fieldset">
+              <legend class="the-legend">Documents</legend>
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>N&deg;</th>
+                  <th>NOM</th>
+                  <th>ACTION</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let document of responseDocumentInfo; index as i">
+                  <td>{{i+1}}</td>
+                  <td>{{document.name}}</td>
+                  <td class="text-center">
+                    <button type="button" title="Afficher le document" class="btn btn-primary btn-icon btn-sm"
+                            (click)="showDocument(document.content)">
+                      <i class="fa fa-eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="text-center" *ngIf="responseDocumentInfo?.length==0">
+                <i class="text-info">Aucune ligne trouvée.</i>
+              </div>
+            </fieldset>
+          </div>-->
+        </div>
+      </div>
+      <div *ngIf="mode==0">
+        <!--<form class="form-horizontal">
+          <div class="row">
+            <div class="col-md-4" style="position: relative;left: 10%">
+              <div *ngIf="searchCatOption==0" class="form-group">
+                <label class="label-important">Patient</label>
+                <ng-select2 [data]="dataPatient"
+                            width="100%"
+                            [(ngModel)]="searchPatient" name="searchPatient"
+                            [placeholder]="'Sélectionner un patient...'">
+                </ng-select2>
+              </div>
+              <div *ngIf="searchCatOption==1" class="form-group">
+                <label class="label-important">Personnel</label>
+                <ng-select2 [data]="dataPersonnel"
+                            width="100%"
+                            [(ngModel)]="searchPersonnel" name="searchPersonnel"
+                            [placeholder]="'Sélectionner un personnel...'">
+                </ng-select2>
+              </div>
+            </div>
+            <div class="col-md-4" style="position: relative;left: 12%">
+              <div class="form-group">
+                <label class="label-important">Catégorie</label>
+                <select #searchCategories class="form-control" (change)="searchCategorieChanged(searchCategories.value)"
+                        name="searchCategorie" [(ngModel)]="searchCategorie">
+                  <option disabled value=undefined>Sélectionner une catégorie....</option>
+                  <option value=0>PATIENT</option>
+                  <option value=1>PERSONNEL</option>
+                </select>
+                <div *ngIf="searchInvalid" class="text-danger">catégorie est obligatoire</div>
+              </div>
+            </div>
+            <div class="col-md-3" style="position: relative;left: 15%">
+              <br>
+              <button class="btn btn-dark" (click)="onSearch()">
+                            <span class="btn-label">
+                                <i class="fa fa-search"></i>
+                            </span>
+                Rechercher
+              </button>
+            </div>
+          </div>
+        </form>-->
+        <ng-container *ngIf="(personnels$ | async) as result" [ngSwitch]="result.dataState">
+          <ng-container *ngSwitchCase="DataSateEnum.LOADING">
+            LOADING.....
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.ERROR">
+            <div class="alert-danger">
+              {{result.errorMessage}}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.LOADED">
+            <div class="content table-responsive table-full-width container-fluid">
+              <div class="toolbar">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label>
+                          <strong>
+                            Taille
+                          </strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <select #taille class="form-control" name="taille" (change)="sizeChanged(taille.value)">
+                          <option  *ngFor="let option of selectValues"
+                                   value="{{option.value}}">{{option.value}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-2"></div>
+                  <!--<div class="col-md-6" style="text-align: right">
+                      <button class="btn btn-default" (click)="export()">
+                          <i class="fa fa-download"></i>
+                          Exporter
+                      </button>
+                  </div>-->
+                </div>
+              </div>
+              <table #table class="table table-striped">
+                <thead style="text-align: center">
+                <tr>
+                  <th>N&deg;</th>
+                  <th>NOM</th>
+                  <th>PRENOM</th>
+                  <th>FONCTION</th>
+                  <th>ACTION</th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center">
+                <tr *ngFor="let personnel of result.data | paginate: {itemsPerPage: pageSize,
+                                     currentPage: currentPage}; index as i">
+                  <td>{{ (((currentPage-1)*pageSize)+1)+i }}</td>
+                  <td>{{ personnel.lastName }}</td>
+                  <td>{{ personnel.firstName }}</td>
+                  <td>{{ personnel.statusPersonnel.name }}</td>
+                  <td>
+                    <button (click)="goToUpdate(personnel)" class="btn btn-dark btn-sm" title="modifier">
+                      <i class="fa fa-edit"></i>
+                    </button>&nbsp;
+                    <button (click)="showInfo(personnel)" class="btn btn-info btn-sm" title="Afficher detail">
+                      <i class="fa fa-info"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+          </ng-container>
+          <div class="text-center" *ngIf="result.data?.length==0">
+            <i class="text-info">Aucune ligne trouvée.</i>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

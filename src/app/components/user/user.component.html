@@ -1,0 +1,238 @@
+<app-nav-bar></app-nav-bar>
+<div class="container">
+  <div class="card">
+    <div class="card-header bg-dark">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="card-title"><strong style="color: whitesmoke">
+            Gestion des utilisateurs</strong></h4>
+        </div>
+        <div *ngIf="mode==0" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary btn-sm" style="border-color: white"
+                  (click)="newUser()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-simple-add"></i>
+                         </span>
+            Nouveau
+          </button>
+        </div>
+        <div *ngIf="mode==1" class="col-md-6" style="text-align: right">
+          <button class="btn btn-secondary btn-sm" style="border-color: white"
+                  (click)="goToList()">
+                         <span class="btn-label">
+                             <i class="nc-icon nc-bullet-list-67"></i>
+                         </span>
+            Liste
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div *ngIf="mode==1">
+        <form [formGroup]="userFormGroup">
+          <div class="row">
+            <div class="col-md-6" *ngIf="roleUser==ROLES.ROLE_SUPER_ADMIN">
+              <div class="form-group">
+                <label class="label-important">Catégorie</label>
+                <select #categories class="form-control" name="categorie" (change)="categorieChanged(categories.value)">
+                  <option disabled value="undefined">Catégories......</option>
+                  <option value=0>PATIENT</option>
+                  <option value=1>PERSONNEL</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div *ngIf="catOption==0" class="form-group">
+                <label class="label-important">Patient</label>
+                <ng-select2 [data]="dataPatient"
+                            width="100%"
+                            formControlName="patient"
+                            [placeholder]="'Sélectionner un patient...'">
+                </ng-select2>
+              </div>
+              <div *ngIf="catOption==1 || roleUser==ROLES.ROLE_ADMIN" class="form-group">
+                <label class="label-important">Personnel</label>
+                <ng-select2 [data]="dataPersonnel"
+                            width="100%"
+                            formControlName="personnel"
+                            [placeholder]="'Sélectionner un personnel...'">
+                </ng-select2>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Login</label>
+                <input class="form-control" type="text" formControlName="username"/>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Mot de pass</label>
+                <input class="form-control" type="password" formControlName="password"/>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Role</label>
+                <select class="form-control" formControlName="role">
+                  <option disabled value="undefined">Role......</option>
+                  <option *ngIf="(roleUser==ROLES.ROLE_SUPER_ADMIN && catOption==1) || roleUser!=ROLES.ROLE_SUPER_ADMIN" value="user">USER</option>
+                  <option *ngIf="(roleUser==ROLES.ROLE_SUPER_ADMIN && catOption==1) || roleUser!=ROLES.ROLE_SUPER_ADMIN" value="admin">ADMIN</option>
+                  <option *ngIf="roleUser==ROLES.ROLE_SUPER_ADMIN && catOption==1" value="super">SUPER ADMIN</option>
+                  <option *ngIf="roleUser==ROLES.ROLE_SUPER_ADMIN && catOption==0" value="patient">PATIENT</option>
+                  <option *ngIf="roleUser==ROLES.ROLE_SUPER_ADMIN && catOption==1" value="pm">PERSONNEL</option>
+                </select>
+              </div>
+            </div>
+            <div *ngIf="(roleUser==ROLES.ROLE_SUPER_ADMIN && catOption==1) || roleUser!=ROLES.ROLE_SUPER_ADMIN" class="col-md-6">
+              <div class="form-group">
+                <label class="label-important">Entite</label>
+                <select class="form-control" formControlName="entite">
+                  <option disabled value="undefined">Entite......</option>
+                  <option *ngFor="let entite of entiteResponse" value="{{entite.id}}">
+                    {{ entite.lastName }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div>&nbsp;</div>
+          <button type="button" class="btn btn-success" (click)="saveUser()">
+            <i class="fa fa-save"></i>
+            Enrégistrer
+          </button>
+        </form>
+      </div>
+      <div *ngIf="mode==0">
+        <form *ngIf="roleUser==ROLES.ROLE_SUPER_ADMIN" class="form-horizontal">
+          <div class="row">
+            <div class="col-md-4" style="position: relative;left: 10%">
+              <div *ngIf="searchCatOption==0" class="form-group">
+                <label class="label-important">Patient</label>
+                <ng-select2 [data]="dataSearchPatient"
+                            width="100%"
+                            [(ngModel)]="searchPatient" name="searchPatient"
+                            [placeholder]="'Sélectionner un patient...'">
+                </ng-select2>
+              </div>
+              <div *ngIf="searchCatOption==1" class="form-group">
+                <label class="label-important">Personnel</label>
+                <ng-select2 [data]="dataSearchPersonnel"
+                            width="100%"
+                            [(ngModel)]="searchPersonnel" name="searchPersonnel"
+                            [placeholder]="'Sélectionner un personnel...'">
+                </ng-select2>
+              </div>
+            </div>
+            <div class="col-md-4" style="position: relative;left: 12%">
+              <div class="form-group">
+                <label class="label-important">Catégorie</label>
+                <select #searchCategories class="form-control" (change)="searchCategorieChanged(searchCategories.value)"
+                        name="searchCategorie" [(ngModel)]="searchCategorie">
+                  <option disabled value=undefined>Sélectionner une catégorie....</option>
+                  <option value=0>PATIENT</option>
+                  <option value=1>PERSONNEL</option>
+                </select>
+                <div *ngIf="searchInvalid" class="text-danger">catégorie est obligatoire</div>
+              </div>
+            </div>
+            <div class="col-md-3" style="position: relative;left: 15%">
+              <br>
+              <button class="btn btn-dark" (click)="onSearch()">
+                            <span class="btn-label">
+                                <i class="fa fa-search"></i>
+                            </span>
+                Rechercher
+              </button>
+            </div>
+          </div>
+        </form>
+        <ng-container *ngIf="(user$ | async) as result" [ngSwitch]="result.dataState">
+          <ng-container *ngSwitchCase="DataSateEnum.LOADING">
+            LOADING.....
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.ERROR">
+            <div class="alert-danger">
+              {{result.errorMessage}}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="DataSateEnum.LOADED">
+            <div class="content table-responsive table-full-width container-fluid">
+              <div class="toolbar">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label>
+                          <strong>
+                            Taille
+                          </strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <select #taille class="form-control" name="taille" (change)="sizeChanged(taille.value)">
+                          <option  *ngFor="let option of selectValues"
+                                   value="{{option.value}}">{{option.value}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-2"></div>
+                  <!--<div class="col-md-6" style="text-align: right">
+                      <button class="btn btn-default" (click)="export()">
+                          <i class="fa fa-download"></i>
+                          Exporter
+                      </button>
+                  </div>-->
+                </div>
+              </div>
+              <table #table class="table table-striped">
+                <thead style="text-align: center">
+                <tr>
+                  <th>N&deg;</th>
+                  <th>LOGIN</th>
+                  <th>ROLE</th>
+                  <th *ngIf="searchCatOption=='1'">ENTITE</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center">
+                <tr *ngFor="let user of result.data | paginate: {itemsPerPage: pageSize,
+                                     currentPage: currentPage}; index as i">
+                  <th>{{ (((currentPage-1)*pageSize)+1)+i }}</th>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.roles[0].name==ROLES.ROLE_SUPER_ADMIN ? 'SUPER ADMIN' : (user.roles[0].name | getRoleName)}}</td>
+                  <td *ngIf="searchCatOption=='1'">{{ (user.entite==null)?'NA':(user.entite?.lastName) }}</td>
+                  <td>{{ (user.isActive)?"Activé":"Desactivé" }}</td>
+                  <td>
+                   <!-- <button (click)="goToUpdate(user)" class="btn btn-sm btn-dark" title="modifier"
+                            data-toggle="modal" data-target="#newUser">
+                      <i class="fa fa-edit"></i>
+                    </button>&nbsp;-->
+                    <button (click)="Status(user)" class="btn btn-success btn-sm" title="Status">
+                      <i class="fa fa-unlock"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+          </ng-container>
+          <div class="text-center" *ngIf="result.data?.length==0">
+            <i class="text-info">Aucune ligne trouvée.</i>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    </div>
+  </div>
+

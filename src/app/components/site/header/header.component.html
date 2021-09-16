@@ -1,0 +1,106 @@
+<!-- ======= Top Bar ======= -->
+<div id="topbar" class="d-flex align-items-center fixed-top">
+  <div class="container d-flex align-items-center justify-content-center justify-content-md-between">
+    <div class="align-items-center d-none d-md-flex">
+      <i class="bi bi-clock"></i> Lundi - Samedi, 8h to 22h
+    </div>
+    <div class="d-flex align-items-center">
+      <i class="bi bi-phone"></i> Contactez-nous sur  +224 629 600 707
+    </div>
+  </div>
+</div>
+
+<!-- ======= Header ======= -->
+<!--<header id="header" class="fixed-top">
+  <div class="container d-flex align-items-center">
+
+    <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt=""></a>
+    &lt;!&ndash; Uncomment below if you prefer to use an image logo &ndash;&gt;
+    &lt;!&ndash; <h1 class="logo me-auto"><a href="index.html">HASIGUI</a></h1> &ndash;&gt;
+
+    <nav id="navbar" class="navbar order-last order-lg-0">
+      <ul>
+        <li><a class="nav-link scrollto " href="#hero">Accueil</a></li>
+        <li><a class="nav-link scrollto" href="#about">À Propos</a></li>
+        <li><a class="nav-link scrollto" href="#services">Services</a></li>
+        <li><a class="nav-link scrollto" href="#departments">Departments</a></li>
+        <li class="dropdown"><a class="nav-link scrollto" href="#"><span>RÉSULTATS EXAMENS</span> <i class="bi bi-chevron-down"></i></a>
+          <ul>
+            <li><a class="nav-link scrollto" href="#">PATIENTS</a></li>
+            <li><a class="nav-link scrollto" href="#">PERSONNEL</a></li>
+          </ul>
+        </li>
+        <li class="dropdown"><a class="nav-link scrollto clickable"><span>AUTRES</span> <i class="bi bi-chevron-down"></i></a>
+          <ul>
+            <li><a class="nav-link scrollto" href="#doctors">DOCTEURS</a></li>
+            <li><a class="nav-link scrollto clickable" (click)="onGetPatientVisiteur()">PATIENTS ET VISITEURS</a>
+              &lt;!&ndash;<ul>
+                <li><a class="nav-link scrollto clickable" (click)="onGetPatientVisiteur('admission')">ADMISSION</a></li>
+                <li><a class="nav-link scrollto clickable" (click)="onGetPatientVisiteur('votre-sejour')">VOTRE SÉJOUR</a></li>
+                <li><a class="nav-link scrollto clickable" (click)="onGetPatientVisiteur('votre-sortie')">VOTRE SORTIE</a></li>
+                <li><a class="nav-link scrollto clickable" (click)="onGetPatientVisiteur('vos-droits-et-devoirs')">VOS DROITS ET DÉVOIRS</a></li>
+                <li><a class="nav-link scrollto clickable" (click)="onGetPatientVisiteur('formalites-administratives')">FORMALITÉS ADMINISTRATIVES</a></li>
+                &lt;!&ndash;<li><a class="nav-link scrollto" href="#">DEMANDE DE RDV EN LIGNE</a></li>&ndash;&gt;
+              </ul>&ndash;&gt;
+            </li>
+            <li><a class="nav-link scrollto clickable" (click)="onGetCentreHospitalier()">CENTRE HÔSPITALIER</a>
+             &lt;!&ndash; <ul>
+                <li><a class="nav-link scrollto" href="#">HISTOIRE DE L'HOPITAL</a></li>
+                <li><a class="nav-link scrollto" href="#">FONCTIONNEMENT</a></li>
+                <li><a class="nav-link scrollto" href="#">QUALITÉS ET SÉCURITES</a></li>
+                <li><a class="nav-link scrollto" href="#">ORGANIGRAMME</a></li>
+                <li><a class="nav-link scrollto" href="#">EVENEMENTS</a></li>
+                <li><a class="nav-link scrollto" href="#doctors">DOCTEURS</a></li>
+              </ul>&ndash;&gt;
+            </li>
+            <li><a class="nav-link scrollto" href="#">COMITÉ SCIENTIFIQUE</a></li>
+          </ul>
+        </li>
+        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav>&lt;!&ndash; .navbar &ndash;&gt;
+
+    <a routerLink="/schedule" class="appointment-btn scrollto"><span class="d-none d-md-inline">Prendre un</span> Rendez-vous</a>
+
+  </div>
+</header>-->
+<header id="header" class="fixed-top">
+  <div class="container d-flex align-items-center">
+    <nav class="navbar navbar-expand-md navbar-light bg-transparent container d-flex align-items-center">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt=""></a>&nbsp;
+        <!-- <h1 class="logo me-auto"><a href="index.html">HASIGUI</a></h1> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="true" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" (click)="hideCollapse()" href="#hero"><b>ACCUEIL</b></a></li>&nbsp;
+            <li class="nav-item"><a class="nav-link" (click)="hideCollapse()" href="#about"><b>À PROPOS</b></a></li>&nbsp;
+            <li class="nav-item"><a class="nav-link" (click)="hideCollapse()" href="#services"><b>SERVICES</b></a></li>&nbsp;
+            <li class="nav-item"><a class="nav-link" (click)="hideCollapse()" href="#departments"><b>DEPARTEMETS</b></a></li>&nbsp;
+            <li class="nav-item"><a class="nav-link clickable" (click)="onGetTestResult()"><b>RÉSULTATS EXAMENS</b></a></li>&nbsp;
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <b>AUTRES</b>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item clickable" href="#doctors"><b>DOCTEURS</b></a></li>
+                <li><a class="dropdown-item clickable" (click)="onGetPatientVisiteur()"><b>PATIENTS ET VISITEURS</b></a>
+                </li>
+                <li><a class="dropdown-item clickable" (click)="onGetCentreHospitalier()"><b>CENTRE HÔSPITALIER</b></a>
+                </li>
+                <li><a class="dropdown-item clickable" href="#"><b>COMITÉ SCIENTIFIQUE</b></a></li>
+              </ul>
+            </li>&nbsp;&nbsp;
+            <li class="nav-item"><a class="nav-link" (click)="hideCollapse()" href="#contact"><b>CONTACT</b></a></li>
+          </ul>
+          <a class="d-flex" routerLink="/schedule" class="appointment-btn scrollto"><span class="d-none d-md-inline">Prendre un</span> Rendez-vous</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<!-- End Header -->
+
