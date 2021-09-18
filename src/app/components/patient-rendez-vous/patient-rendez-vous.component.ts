@@ -85,4 +85,11 @@ export class PatientRendezVousComponent implements OnInit {
   }
 
 
+  goToUpdate(appointment: PatientAppointment) {
+    
+  }
+
+  onGoToTime(appointment: PatientAppointment) {
+    
+  }
 }

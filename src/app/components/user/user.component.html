@@ -199,7 +199,7 @@
                   <th>N&deg;</th>
                   <th>LOGIN</th>
                   <th>ROLE</th>
-                  <th *ngIf="searchCatOption=='1'">ENTITE</th>
+                  <th *ngIf="searchCatOption==1">ENTITE</th>
                   <th>STATUS</th>
                   <th>ACTION</th>
                 </tr>
@@ -210,7 +210,7 @@
                   <th>{{ (((currentPage-1)*pageSize)+1)+i }}</th>
                   <td>{{ user.username }}</td>
                   <td>{{ user.roles[0].name==ROLES.ROLE_SUPER_ADMIN ? 'SUPER ADMIN' : (user.roles[0].name | getRoleName)}}</td>
-                  <td *ngIf="searchCatOption=='1'">{{ (user.entite==null)?'NA':(user.entite?.lastName) }}</td>
+                  <td *ngIf="searchCatOption==1">{{ (user.entite==null)?'NA':(user.entite?.lastName) }}</td>
                   <td>{{ (user.isActive)?"Activé":"Desactivé" }}</td>
                   <td>
                    <!-- <button (click)="goToUpdate(user)" class="btn btn-sm btn-dark" title="modifier"
